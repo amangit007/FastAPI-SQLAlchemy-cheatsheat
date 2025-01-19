@@ -105,6 +105,17 @@ def associate_request_training(request_id: int, training_id: int, db: Session = 
 
 @app.get("/requests/")
 def get_all_requests(db: Session = Depends(get_db)):
+    # Short way to load joined data
+    # requests = (
+    #     db.query(Request)
+    #     .options(
+    #         load_only(Request.id, Request.name),
+    #         joinedload(Request.trainings).load_only(Training.id, Training.title)
+    #     )
+    #     .all()
+    # )
+
+    # Postgres data loading
     query = (
         select(
             Request.id,
